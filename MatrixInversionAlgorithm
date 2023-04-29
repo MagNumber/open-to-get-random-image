@@ -1,0 +1,44 @@
+"```python
+import numpy as np
+
+def matrix_inversion(matrix):
+    m_dim = len(matrix)
+    det = np.linalg.det(matrix)
+    
+    if m_dim == 0:
+        raise ValueError(""Matrix is empty"")
+    if det == 0:
+        raise ValueError(""Matrix is singular (non-invertible)"")
+
+    adjoint = create_adjoint(matrix) 
+    adjoint_transpose = adjoint.T
+    inverse = adjoint_transpose / det
+
+    return inverse
+
+def create_adjoint(matrix):
+    m_dim = len(matrix)
+    adjugate_matrix = np.zeros((m_dim, m_dim))
+
+    for i in range(m_dim):
+        for j in range(m_dim):
+            minor_matrix = np.delete(matrix, i, axis=0)
+            minor_matrix = np.delete(minor_matrix, j, axis=1)
+            cofactor = (-1) ** (i + j) * np.linalg.det(minor_matrix)
+            adjugate_matrix[i][j] = cofactor
+
+    return adjugate_matrix
+
+if __name__ == ""__main__"":
+    A = np.array([[3,0,2],[2,0,-2],[0,1,1]])
+    A_inverse = matrix_inversion(A)
+    print(""A:"")
+    print(A)
+    print(""\nA Inverse:"")
+    print(A_inverse)
+
+    # Check if the inversion is successful
+    identity_matrix = np.round(np.dot(A, A_inverse)).astype(int)
+    print(""\nA * A_inv:"")
+    print(identity_matrix)
+```"
